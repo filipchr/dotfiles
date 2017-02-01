@@ -1,0 +1,7 @@
+[user]
+	name = Filip Christoffersson
+	email = flpchrsn@gmail.com
+[core]
+	editor = nvim
+[color]
+	ui = true
