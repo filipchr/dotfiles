@@ -1,5 +1,5 @@
-set nocompatible               " be iMproved
-filetype off                   " required!
+set nocompatible
+filetype off
 set termguicolors
 
 set nobackup
@@ -9,6 +9,7 @@ set scrolloff=7
 set autoread
 set incsearch
 set runtimepath^=~/.vim/bundle/ctrlp.vim
+set rnu
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
@@ -34,6 +35,7 @@ Plugin 'easymotion/vim-easymotion'
 Plugin 'ervandew/supertab'
 Plugin 'ntpeters/vim-better-whitespace'
 Plugin 'Valloric/YouCompleteMe'
+
 " Track the engine.
 Plugin 'SirVer/ultisnips'
 Plugin 'mxw/vim-jsx'
@@ -49,11 +51,9 @@ Plugin 'vim-scripts/indentpython.vim'
 call vundle#end()            " required
 filetype plugin indent on    " required
 
-" set listchars=eol:¬,tab:\|\<Tab>
-
 " NERDTree
 map <C-n> :NERDTreeToggle<CR>
-let NERDTreeIgnore=[ '\.git$', '\.DS_Store$' ]
+let NERDTreeIgnore=[ '\.git$', '\.DS_Store$', 'node_modules$[[dir]]' ]
 let g:NERDTreeDirArrowExpandable = '+'
 let g:NERDTreeDirArrowCollapsible = '-'
 let g:NERDTreeMinimalUI = 1
@@ -69,11 +69,19 @@ let g:nerdtree_tabs_no_startup_for_diff = 1
 let g:vim_jsx_pretty_colorful_config = 1
 
 " Vim gitgutter
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
 let g:gitgutter_sign_column_always = 1
 let g:gitgutter_override_sign_column_highlight = 0
 let g:gitgutter_map_keys = 0
-let g:gitgutter_realtime = 0
-let g:gitgutter_eager = 0
+let g:gitgutter_realtime = 1
+let g:gitgutter_eager = 1
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
 " toggle NERDTree in every tab
 nnoremap <silent><leader>t :NERDTreeTabsToggle<cr>
@@ -90,13 +98,44 @@ let g:UltiSnipsJumpBackwardTrigger="<c-z>"
 let g:UltiSnipsEditSplit="vertical"
 let g:UltiSnipsUsePythonVersion = 3
 
+" neovim stuff
+let g:syntastic_check_on_open=1
+let g:syntastic_check_on_wq=1
+let g:syntastic_aggregate_errors=1
+let g:syntastic_error_symbol='✗'
+let g:syntastic_warning_symbol='⚠'
+let g:syntastic_enable_ballons=has('ballon_eval')
+let g:syntastic_always_populate_loc_list=1
+let g:syntastic_auto_jump=1
+let g:syntastic_auto_loc_list=1
+let g:syntastic_loc_list_height=3
+let g:syntastic_ignore_files = ['^/usr/', '*node_modules*', '*vendor*', '*build*', '*LOCAL*', '*BASE', '*REMOTE*']
+let g:syntastic_mode_map = { 'mode': 'active' }
+let g:syntastic_javascript_checkers=['jshint', 'jscs']
+let g:syntastic_json_checkers=['jsonlint', 'jsonval']
+let g:syntastic_ruby_checkers=['rubocop','mri']
+let g:syntastic_perl_checkers=['perl','perlcritic','podchecker']
+let g:syntastic_python_checkers=['pylint','pep8','python']
+let g:syntastic_cpp_checkers=['gcc','cppcheck','cpplint','ycm','clang_tidy','clang_check']
+let g:syntastic_c_checkers=['gcc','make','cppcheck','clang_tidy','clang_check']
+let g:syntastic_haml_checkers=['haml_lint', 'haml']
+let g:syntastic_html_checkers=['jshint']
+let g:syntastic_yaml_checkers=['jsyaml']
+let g:syntastic_sh_checkers=['sh','shellcheck','checkbashisms']
+let g:syntastic_vim_checkers=['vimlint']
+let g:syntastic_enable_perl_checker=1
+let g:syntastic_c_clang_tidy_sort=1
+let g:syntastic_c_clang_check_sort=1
+let g:syntastic_c_remove_include_errors=1
+let g:syntastic_quiet_messages = { "level": "[]", "file": ['*_LOCAL_*', '*_BASE_*', '*_REMOTE_*']  }
+let g:syntastic_stl_format = '[%E{E: %fe #%e}%B{, }%W{W: %fw #%w}]'
+let g:syntastic_java_javac_options = "-g:none -source 8 -Xmaxerrs 5 -Xmaswarns 5"
+
 syntax enable
 " enable dark mode
 " set background=dark
 " enable syntax processing
-" colorscheme solarized
 let base16colorspace=256
-" colorscheme base16-default-dark
 colorscheme base16-materia
 
 set autoindent
@@ -122,7 +161,7 @@ set clipboard=unnamed
 " Enhance command-line completion
 set wildmenu
 " Allow cursor keys in insert mode
-set esckeys
+" set esckeys
 " Allow backspace in insert mode
 set backspace=indent,eol,start
 " Optimize for fast terminal connections
@@ -215,4 +254,3 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
-
